@@ -18,39 +18,49 @@ public class PanelControl extends JFrame {
     private JTextArea areaLog;
 
     public PanelControl() {
-        setTitle("Casa Inteligente - Control Central");
-        setSize(700, 500);
+        setTitle("SmartTecnoHouse - Panel de Control");
+        setSize(820, 480);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(8, 8));
+        getContentPane().setBackground(new Color(232, 245, 240));
 
-        panelSensores = new JPanel();
-        panelSensores.setBorder(BorderFactory.createTitledBorder("Estado sensores"));
-        panelSensores.setLayout(new GridLayout(0, 1));
-
-        panelActuadores = new JPanel();
-        panelActuadores.setBorder(BorderFactory.createTitledBorder("Estado actuadores"));
-        panelActuadores.setLayout(new GridLayout(0, 1));
-
-        JPanel panelCentral = new JPanel(new GridLayout(1, 2));
-        panelCentral.add(panelSensores);
-        panelCentral.add(panelActuadores);
-
-        botonActualizar = new JButton("Leer sensores");
+        // Sidebar izquierdo con botones en columna
+        botonActualizar    = new JButton("Leer sensores");
         botonAplicarReglas = new JButton("Ejecutar reglas");
-        botonGuardar = new JButton("Guardar");
+        botonGuardar       = new JButton("Guardar");
 
-        JPanel panelBotones = new JPanel();
-        panelBotones.add(botonActualizar);
-        panelBotones.add(botonAplicarReglas);
-        panelBotones.add(botonGuardar);
+        JPanel sidebar = new JPanel(new GridLayout(3, 1, 0, 10));
+        sidebar.setBackground(new Color(180, 215, 200));
+        sidebar.setBorder(BorderFactory.createEmptyBorder(20, 12, 20, 12));
+        sidebar.add(botonActualizar);
+        sidebar.add(botonAplicarReglas);
+        sidebar.add(botonGuardar);
 
-        areaLog = new JTextArea(6, 50);
+        // Paneles de datos apilados verticalmente
+        panelSensores = new JPanel(new GridLayout(0, 1));
+        panelSensores.setBorder(BorderFactory.createTitledBorder("Sensores"));
+        panelSensores.setBackground(new Color(245, 252, 249));
+
+        panelActuadores = new JPanel(new GridLayout(0, 1));
+        panelActuadores.setBorder(BorderFactory.createTitledBorder("Actuadores"));
+        panelActuadores.setBackground(new Color(245, 252, 249));
+
+        JPanel panelDatos = new JPanel(new GridLayout(2, 1, 0, 8));
+        panelDatos.setBackground(new Color(232, 245, 240));
+        panelDatos.setBorder(BorderFactory.createEmptyBorder(8, 4, 8, 8));
+        panelDatos.add(panelSensores);
+        panelDatos.add(panelActuadores);
+
+        // Log inferior
+        areaLog = new JTextArea(4, 40);
         areaLog.setEditable(false);
+        areaLog.setBackground(new Color(245, 252, 249));
         JScrollPane scrollLog = new JScrollPane(areaLog);
+        scrollLog.setBorder(BorderFactory.createTitledBorder("Log"));
 
-        add(panelBotones, BorderLayout.NORTH);
-        add(panelCentral, BorderLayout.CENTER);
-        add(scrollLog, BorderLayout.SOUTH);
+        add(sidebar,    BorderLayout.WEST);
+        add(panelDatos, BorderLayout.CENTER);
+        add(scrollLog,  BorderLayout.SOUTH);
     }
 
     // Refresca los paneles a partir del estado actual del modelo
@@ -60,14 +70,16 @@ public class PanelControl extends JFrame {
         panelSensores.removeAll();
         for (int i = 0; i < casa.getSensores().size(); i++) {
             SensorBase s = casa.getSensores().get(i);
-            JLabel etiqueta = new JLabel(s.getNombre() + ": " + s.getEstadoActual());
+            JLabel etiqueta = new JLabel("  " + s.getNombre() + ": " + s.getEstadoActual());
+
             panelSensores.add(etiqueta);
         }
 
         panelActuadores.removeAll();
         for (int i = 0; i < casa.getActuadores().size(); i++) {
             ActuadorBase a = casa.getActuadores().get(i);
-            JLabel etiqueta = new JLabel(a.getNombre() + ": " + a.getEstadoActual());
+            JLabel etiqueta = new JLabel("  " + a.getNombre() + ": " + a.getEstadoActual());
+
             panelActuadores.add(etiqueta);
         }
 
