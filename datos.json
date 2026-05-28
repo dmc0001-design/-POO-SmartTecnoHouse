@@ -1,0 +1,7 @@
+{
+  "actuadores": [
+    {"id": "luz", "estado": "ON"},
+    {"id": "ventil", "estado": "OFF"},
+    {"id": "enchufe", "estado": "ON"}
+  ]
+}
